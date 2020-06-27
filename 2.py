@@ -1,7 +1,7 @@
 # coding utf-8
 import time
 
-class fib():
+class enigme2():
     def __init__(self, max):
         print(f'Calcul des n termes de Fibonacci inférieurs à {max}')
         self.first_term = int()
@@ -27,5 +27,5 @@ class fib():
 
 if __name__ == "__main__":
     start_time = time.time()
-    f = fib(4_000_000)
+    f = enigme2(4_000_000)
     print(f'Durée d\'exécution = {time.time()-start_time}s ')
