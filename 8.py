@@ -6,15 +6,8 @@ def main(n):
     print(f'Recherche du plus grand produit de {n} chiffres consécutifs parmi {nombre}')
 
     size_slice = n
-    pmax = 1
-    pcur = 1
-
-    # for i in range(len(nombre)):
-    #     print(f'nombre[{i}]={nombre[i]}')
-    #     pcur = produit(nombre[i:n])
-    #     if pcur > pmax:
-    #         o = operation(nombre[i:n])
-    #         print(o)
+    pmax = 0
+    pcur = 0
 
     # nombre="123450345621354"
     index = int()
@@ -26,7 +19,7 @@ def main(n):
                 pmax = pcur
                 index = i
                 # print (">>>>>>>>>>>> max")
-    print(f'Le plus grand produit est : {pmax} =', operation(nombre[index:index+n]))
+    print(f'Le plus grand produit est : {operation(nombre[index:index+n])}={pmax}')
 
 
 def operation(chaine):
@@ -50,4 +43,7 @@ if __name__ == "__main__":
     print(f'Durée d\'exécution : {time.time()-start_time}s.')
     start_time = time.time()
     main(13)
+    print(f'Durée d\'exécution : {time.time()-start_time}s.')
+    start_time = time.time()
+    main(69)
     print(f'Durée d\'exécution : {time.time()-start_time}s.')
