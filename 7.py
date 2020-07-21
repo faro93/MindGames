@@ -19,7 +19,7 @@ def PremierSuivant(lp):
         compteur = lp[-1]+1
         indexlp = 0
         trouvé = False
-        while trouvé == False and indexlp < len(lp):
+        while not trouvé and indexlp < len(lp):
             if compteur%lp[indexlp] == 0:
                 compteur += 1
                 indexlp = 0
