@@ -41,6 +41,8 @@ class Matrice():
         self.matrice = np.array(matrice)
 
     def info(self):
+        """ Affiche les informations de la matrice
+        """
         print(f'matrice :\n{self.matrice}')
         print(f'\tdimension : {self.matrice.ndim}')
         print(f'\tforme : {self.matrice.shape}')
@@ -63,7 +65,6 @@ class MProduit():
         Entrée : int(index, taille) : (index de départ, taille de la liste à considérer)
         Sortie : produit
         """
-        pass
 
     def vProduit(self, index, taille):
         """ vProduit : calcule le produit vertical de haut en bas à partir
@@ -71,7 +72,6 @@ class MProduit():
         Entrée : int(index, taille) : (index de départ, taille de la liste à considérer)
         Sortie : produit
         """
-        pass
 
     def dProduit(self, index, taille):
         """ vProduit : calcule le produit en diagonal de gauche à droite et de haut en bas à partir
@@ -79,8 +79,6 @@ class MProduit():
         Entrée : int(index, taille) : (index de départ, taille de la liste à considérer)
         Sortie : produit
         """
-        pass
-
 
 
 if __name__ == "__main__":
