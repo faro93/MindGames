@@ -4,10 +4,7 @@ Class Matrice
     Entrée : liste contenant la matrice (LxC)
     Méthodes :
         __init__ : initialisation de la matrice avec NUMPY
-    Sortie : matrice "numpy"
-Class MProduit
-    Entrée : matrice numpy
-    Sortie :
+    hListe, vListe, dListe : retourne la liste des valeurs souhaitées
 """
 import time
 import numpy as np
@@ -40,9 +37,13 @@ class Matrice():
     def __init__(self, matrice):
         self.matrice = np.array(matrice)
 
-    def info(self):
+    def info(self, hauteur=False, largeur=False):
         """ Affiche les informations de la matrice
         """
+        if largeur:
+            return self.matrice.shape[0]
+        if hauteur:
+            return self.matrice.shape[1]
         print(f'matrice :\n{self.matrice}')
         print(f'\tdimension : {self.matrice.ndim}')
         print(f'\tforme : {self.matrice.shape}')
@@ -50,40 +51,84 @@ class Matrice():
         print('\ttaille :',\
             f'{self.matrice.shape[0]*self.matrice.shape[1]*self.matrice.itemsize} octets')
 
-class MProduit():
-    """ Calcul du plus gd produit de n nombres dans la matrice
-    Entrée : nombres de facteurs
-    Méthodes : hProduit, vProduit, dProduit
-    Sortie : écran
-    """
-    def __init__(self, matrice):
-        self.matrice = matrice
-
-    def hProduit(self, index, taille):
-        """ hProduit : calcule le produit horizontal de gauche à droite à partir
+    def hListe(self, ligne, colonne, taille):
+        """ hListe : retourne la liste de valeurs horizontales de gauche à droite à partir
         de l'index index et du nombre d'éléments taille
-        Entrée : int(index, taille) : (index de départ, taille de la liste à considérer)
-        Sortie : produit
+        Entrée : int(ligne, colonne, taille) : (ligne et colonne de départ, taille de la liste à considérer)
+        Sortie : liste
         """
+        liste = list()
+        print(f'ligne={ligne}, colonne={colonne}, taille={taille}')
+        if colonne+(taille-1) < self.matrice.shape[1] and ligne < self.matrice.shape[0]:
+            liste = self.matrice[ligne,colonne:(colonne+taille)]
+        return liste
 
-    def vProduit(self, index, taille):
-        """ vProduit : calcule le produit vertical de haut en bas à partir
+    def vListe(self, ligne, colonne, taille):
+        """ vListe : retourne la liste de valeurs verticales de haut en bas à partir
         de l'index index et du nombre d'éléments taille
-        Entrée : int(index, taille) : (index de départ, taille de la liste à considérer)
-        Sortie : produit
+        Entrée : int(ligne, colonne, taille) : (ligne et colonne de départ, taille de la liste à considérer)
+        Sortie : liste
         """
+        liste = list()
+        print(f'ligne={ligne}, colonne={colonne}, taille={taille}')
+        if ligne+(taille-1) < self.matrice.shape[0]:
+            liste = self.matrice[ligne:(ligne+taille), colonne]
+        return liste
 
-    def dProduit(self, index, taille):
-        """ vProduit : calcule le produit en diagonal de gauche à droite et de haut en bas à partir
+
+    def ddListe(self, ligne, colonne, taille):
+        """ ddListe : retourne la liste de valeurs en diagonal de gauche à droite et de haut en bas à partir
         de l'index index et du nombre d'éléments taille
-        Entrée : int(index, taille) : (index de départ, taille de la liste à considérer)
-        Sortie : produit
+        Entrée : int(ligne, colonne, taille) : (ligne et colonne de départ, taille de la liste à considérer)
+        Sortie : liste
         """
+        liste = list()
+        lliste = list()
+        cliste = list()
+        print(f'ligne={ligne}, colonne={colonne}, taille={taille}')
+        if ligne+(taille-1) < self.matrice.shape[0] and colonne+(taille-1) < self.matrice.shape[1]:
+            for c in range(colonne, colonne+taille):
+                cliste.append(c)
+            for l in range(ligne, ligne+taille):
+                lliste.append(l)
+            print(f'lliste={lliste}, cliste={cliste} ')
+            liste = self.matrice[lliste, cliste]
+        return liste
 
+    def dgListe(self, ligne, colonne, taille):
+        """ dgListe : retourne la liste de valeurs en diagonal de droite à gauche et de haut en bas à partir
+        de l'index index et du nombre d'éléments taille
+        Entrée : int(ligne, colonne, taille) : (ligne et colonne de départ, taille de la liste à considérer)
+        Sortie : liste
+        """
+        liste = list()
+        lliste = list()
+        cliste = list()
+        print(f'ligne={ligne}, colonne={colonne}, taille={taille}')
+        if ligne+(taille-1) < self.matrice.shape[0] and colonne-(taille-1) >= 0 and colonne < self.matrice.shape[1]:
+            for c in range(colonne, colonne-taille, -1):
+                cliste.append(c)
+            for l in range(ligne, ligne+taille):
+                lliste.append(l)
+            print(f'lliste={lliste}, cliste={cliste} ')
+            liste = self.matrice[lliste, cliste]
+        return liste
 
 if __name__ == "__main__":
     start_time = time.time()
     m = Matrice(matriceList)
     m.info()
-    p = MProduit(m)
+    # l = m.hListe(19, 17, 4)
+    # print(f'liste : {l}')
+    # l = m.vListe(16, 19, 4)
+    # print(f'liste : {l}')
+    # l = m.ddListe(16, 16, 4)
+    # print(f'liste : {l}')
+    # l = m.dgListe(0, 19, 4)
+    # print(f'liste : {l}')
+    for l in range(0, m.info(hauteur=True)):
+        print(f'ligne{l}: ', end='')
+        for c in range(0, m.info(largeur=True)):
+            print(f'{c} ', end='')
+        print()
     print(f'Durée d\'exécution : {time.time()-start_time}s')
