@@ -58,7 +58,7 @@ class Matrice():
         Sortie : liste
         """
         liste = list()
-        print(f'ligne={ligne}, colonne={colonne}, taille={taille}')
+        # print(f'ligne={ligne}, colonne={colonne}, taille={taille}')
         if colonne+(taille-1) < self.matrice.shape[1] and ligne < self.matrice.shape[0]:
             liste = self.matrice[ligne,colonne:(colonne+taille)]
         return liste
@@ -70,7 +70,7 @@ class Matrice():
         Sortie : liste
         """
         liste = list()
-        print(f'ligne={ligne}, colonne={colonne}, taille={taille}')
+        # print(f'ligne={ligne}, colonne={colonne}, taille={taille}')
         if ligne+(taille-1) < self.matrice.shape[0]:
             liste = self.matrice[ligne:(ligne+taille), colonne]
         return liste
@@ -85,13 +85,13 @@ class Matrice():
         liste = list()
         lliste = list()
         cliste = list()
-        print(f'ligne={ligne}, colonne={colonne}, taille={taille}')
+        # print(f'ligne={ligne}, colonne={colonne}, taille={taille}')
         if ligne+(taille-1) < self.matrice.shape[0] and colonne+(taille-1) < self.matrice.shape[1]:
             for c in range(colonne, colonne+taille):
                 cliste.append(c)
             for l in range(ligne, ligne+taille):
                 lliste.append(l)
-            print(f'lliste={lliste}, cliste={cliste} ')
+            # print(f'lliste={lliste}, cliste={cliste} ')
             liste = self.matrice[lliste, cliste]
         return liste
 
@@ -104,31 +104,53 @@ class Matrice():
         liste = list()
         lliste = list()
         cliste = list()
-        print(f'ligne={ligne}, colonne={colonne}, taille={taille}')
+        # print(f'ligne={ligne}, colonne={colonne}, taille={taille}')
         if ligne+(taille-1) < self.matrice.shape[0] and colonne-(taille-1) >= 0 and colonne < self.matrice.shape[1]:
             for c in range(colonne, colonne-taille, -1):
                 cliste.append(c)
             for l in range(ligne, ligne+taille):
                 lliste.append(l)
-            print(f'lliste={lliste}, cliste={cliste} ')
+            # print(f'lliste={lliste}, cliste={cliste} ')
             liste = self.matrice[lliste, cliste]
         return liste
+
+class Produit():
+    def __new__(self, liste):
+        p = 1
+        for f in liste:
+            p *= f
+        return p
+
+class Compare():
+    def __new__(self, t):
+        pmax = {"p": 0, "l": 0, "c": 0, "liste": list()}
+        for l in range(0, m.info(hauteur=True)):
+            for c in range(0, m.info(largeur=True)):
+                hliste = m.hListe(l, c, t)
+                vliste = m.vListe(l, c, t)
+                ddliste = m.ddListe(l, c, t)
+                dgliste = m.dgListe(l, c, t)
+                pliste = list()
+                pliste.append(Produit(hliste))
+                pliste.append(Produit(vliste))
+                pliste.append(Produit(ddliste))
+                pliste.append(Produit(dgliste))
+                p = max(pliste)
+                if pliste.index(p) == 0:
+                    liste = hliste
+                elif pliste.index(p) == 1:
+                    liste = vliste
+                elif pliste.index(p) == 2:
+                    liste = ddliste
+                elif pliste.index(p) == 3:
+                    liste = dgliste
+                if p > pmax.get("p"):
+                    pmax = {"p": p, "l": l, "c": c, "liste": liste}
+        print(f'Le plus grand produit {pmax.get("p")} est composé des facteurs {pmax.get("liste")} est situé en l{pmax.get("l")}c{pmax.get("c")}')
 
 if __name__ == "__main__":
     start_time = time.time()
     m = Matrice(matriceList)
     m.info()
-    # l = m.hListe(19, 17, 4)
-    # print(f'liste : {l}')
-    # l = m.vListe(16, 19, 4)
-    # print(f'liste : {l}')
-    # l = m.ddListe(16, 16, 4)
-    # print(f'liste : {l}')
-    # l = m.dgListe(0, 19, 4)
-    # print(f'liste : {l}')
-    for l in range(0, m.info(hauteur=True)):
-        print(f'ligne{l}: ', end='')
-        for c in range(0, m.info(largeur=True)):
-            print(f'{c} ', end='')
-        print()
+    Compare(4)
     print(f'Durée d\'exécution : {time.time()-start_time}s')
