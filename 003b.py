@@ -25,9 +25,9 @@ def main(n):
     #     print(f'premiers={premiers} ')
 
     print(f'Le produit de facteurs premiers de {n} est : ',end='')
-    for i in facteurs:
-        print(f'{i}', end='')
-        if facteurs.index(i) != len(facteurs)-1:
+    for i in range(len(facteurs)):
+        print(f'{facteurs[i]}', end='')
+        if i != len(facteurs)-1:
             print(f'x', end='')
     print('')
     print(f'Le plus grand facteur premier de {n} est {facteurs[-1]}')
@@ -55,8 +55,11 @@ def PremierSuivant(lp):
     return lp
 
 if __name__ == "__main__":
-    main(12)
+    # main(12)
+    # print()
+    main(28)
     print()
-    main(13195)
-    print()
-    main(600851475143)
+    main(154)
+    # main(13195)
+    # print()
+    # main(600851475143)
