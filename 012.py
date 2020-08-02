@@ -1,5 +1,6 @@
 # coding utf-8
 import time
+import itertools
 
 class Triangle():
     """
@@ -34,7 +35,6 @@ class Diviseurs():
     """
     def __init__(self):
         self.diviseurs = list()
-        self.combinaisons = list()
         self.compte = int()
 
     def Compte(self, facteurs):
@@ -52,15 +52,37 @@ class Diviseurs():
         """ Dénombre les diviseurs d'après la liste des facteurs
         """
         nf = len(facteurs)
+        diviseurs = [1]
         for nf in range(1, len(facteurs)+1):
-            print(f'Nombre de facteurs : {nf}')
-                
+            l = itertools.combinations(facteurs, nf)
+            for i in l:
+                diviseurs.append(self.Défini(i))
+        self.diviseurs = sorted(set(diviseurs))
+        # print(self.diviseurs)
+
+    def Défini(self, liste):
+        diviseur = 1
+        for i in liste:
+            diviseur *= i
+        return diviseur
+
+    def Affiche(self, n):
+        print(f'{n} a {len(self.diviseurs)} diviseurs : ', end='')
+        for i in range(len(self.diviseurs)):
+            print(self.diviseurs[i], end='')
+            if i < len(self.diviseurs)-1:
+                print(', ', end='')
+        print()
+
 
 class Premier():
     """
     Retourne True si le nombre passé est premier, sinon False
     """
-    def __new__(self, n):
+    def __init__(self):
+        self.premiers = list()
+
+    def Vérifie(self, n):
         if n%2 == 0:
             return n == 2
         d = 3
@@ -77,8 +99,8 @@ class Factorisation():
     \tFactorise(int n) = list(facteurs premiers)
     \tAffiche(list facteurs)
     """
-    def __init__(self):
-        self.premiers = list()
+    def __init__(self, p):
+        self.premiers = p
         self.facteurs = list()
         self.quotient = int()
         self.indexpremiers = 0
@@ -91,8 +113,9 @@ class Factorisation():
         Factorise n par des nombres premiers et génère une liste de ces facteurs
         """
         self.divisé = n
-        if Premier(self.nombre):
-            self.premiers.append(self.nombre)
+        if p.Vérifie(self.nombre):
+            if self.nombre not in self.premiers:
+                self.premiers.append(self.nombre)
         while self.quotient != 1:
             if self.divisé%self.premiers[self.indexpremiers] == 0:
                 self.quotient = self.divisé//self.premiers[self.indexpremiers]
@@ -100,7 +123,9 @@ class Factorisation():
                 self.facteurs.append(self.premiers[self.indexpremiers])
             else:
                 self.nombre += 1
-                while not Premier(self.nombre):
+                while not p.Vérifie(self.nombre):
+                    # if self.nombre not in p.premiers:
+                    #     p.premiers.append(self.nombre)
                     self.nombre += 1
                 self.premiers.append(self.nombre)
                 self.indexpremiers += 1
@@ -118,14 +143,25 @@ class Factorisation():
         print('')
 
 if __name__ == "__main__":
-    for n in (2, 3, 5, 7, 15):
-        start_time = time.time()
+    start_time = time.time()
+    p = Premier()
+    n = 2 #106272 #34911 #2
+    trouvé = False
+    while not trouvé:
         somme = Triangle(n)
-        print(f'La somme du triangle naturel n°{n} est {somme}')
-        f = Factorisation()
+        # print(f'La somme du triangle naturel n°{n} est {somme}')
+        f = Factorisation(p.premiers)
         facteurs = f.Factorise(somme)
-        f.Affiche(somme, facteurs)
+        # f.Affiche(somme, facteurs)
         d = Diviseurs()
-        print(f'{somme} est divisible par {d.Compte(facteurs)} combinaisons')
+        # print(f'{somme} est divisible par {d.Compte(facteurs)} combinaisons')
         d.Dénombre(facteurs)
-        print(f'Durée d\'exécution : {time.time()-start_time}s.\n')
+        if len(d.diviseurs)%100 == 0:
+            if len(d.diviseurs) == 500:
+                trouvé = True
+            print(f'La somme du triangle naturel n°{n} est {somme}')
+            d.Affiche(somme)
+        n += 1
+        print(p.premiers)
+    print(f'Durée d\'exécution : {time.time()-start_time}s.\n')
+
