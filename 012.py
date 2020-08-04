@@ -1,6 +1,7 @@
 # coding utf-8
 import time
 import itertools
+from numpy import prod
 
 class Triangle():
     """
@@ -8,10 +9,8 @@ class Triangle():
     """
     def __new__(self, n):
         somme = 0
-        triangle = list()
-        for i in range(1, n+1):
-            somme += i
-            triangle.append(i)
+        triangle = list(range(1, n+1))
+        somme = sum(triangle)
         return somme
 
 class Factoriel():
@@ -19,12 +18,7 @@ class Factoriel():
     Retourne n!
     """
     def __new__(self, n):
-        # print(f'Factoriel({n})=', end='')
-        p = 1
-        for i in range(1, n+1):
-            p *= i
-        # print(p)
-        return p
+        return prod(range(1, n+1))
 
 class Diviseurs():
     """
@@ -35,7 +29,6 @@ class Diviseurs():
     """
     def __init__(self):
         self.diviseurs = list()
-        self.compte = int()
 
     def Compte(self, facteurs):
         """ Compte les combinaisons possibles pour n nombres\n
@@ -45,8 +38,7 @@ class Diviseurs():
         s = 0
         for k in range(1, n+1):
             s += int(Factoriel(n)/(Factoriel(k)*Factoriel(n-k)))
-            self.compte = s+1 # ajout du diviseur 1 (neutre)
-        return self.compte
+        return s+1 # ajout du diviseur 1 (neutre)
 
     def Dénombre(self, facteurs):
         """ Dénombre les diviseurs d'après la liste des facteurs
@@ -54,17 +46,10 @@ class Diviseurs():
         nf = len(facteurs)
         diviseurs = [1]
         for nf in range(1, len(facteurs)+1):
-            l = itertools.combinations(facteurs, nf)
-            for i in l:
-                diviseurs.append(self.Défini(i))
+            combs = itertools.combinations(facteurs, nf)
+            for liste in combs:
+                diviseurs.append(prod(liste))
         self.diviseurs = sorted(set(diviseurs))
-        # print(self.diviseurs)
-
-    def Défini(self, liste):
-        diviseur = 1
-        for i in liste:
-            diviseur *= i
-        return diviseur
 
     def Affiche(self, n):
         print(f'{n} a {len(self.diviseurs)} diviseurs : ', end='')
@@ -79,10 +64,7 @@ class Premier():
     """
     Retourne True si le nombre passé est premier, sinon False
     """
-    def __init__(self):
-        self.premiers = list()
-
-    def Vérifie(self, n):
+    def __new__(self, n):
         if n%2 == 0:
             return n == 2
         d = 3
@@ -99,12 +81,13 @@ class Factorisation():
     \tFactorise(int n) = list(facteurs premiers)
     \tAffiche(list facteurs)
     """
-    def __init__(self, p):
-        self.premiers = p
+    def __init__(self):
+        # self.premiers = p
         self.facteurs = list()
         self.quotient = int()
         self.indexpremiers = 0
         self.nombre = 2
+        self.divisé = int()
 
         # self.facteurs.append(1)
 
@@ -113,21 +96,20 @@ class Factorisation():
         Factorise n par des nombres premiers et génère une liste de ces facteurs
         """
         self.divisé = n
-        if p.Vérifie(self.nombre):
-            if self.nombre not in self.premiers:
-                self.premiers.append(self.nombre)
+        if Premier(self.nombre):
+            if self.nombre not in premiers:
+                premiers.append(self.nombre)
         while self.quotient != 1:
-            if self.divisé%self.premiers[self.indexpremiers] == 0:
-                self.quotient = self.divisé//self.premiers[self.indexpremiers]
+            if self.divisé%premiers[self.indexpremiers] == 0:
+                self.quotient = self.divisé//premiers[self.indexpremiers]
                 self.divisé = self.quotient
-                self.facteurs.append(self.premiers[self.indexpremiers])
+                self.facteurs.append(premiers[self.indexpremiers])
             else:
                 self.nombre += 1
-                while not p.Vérifie(self.nombre):
-                    # if self.nombre not in p.premiers:
-                    #     p.premiers.append(self.nombre)
+                while not Premier(self.nombre):
                     self.nombre += 1
-                self.premiers.append(self.nombre)
+                if self.nombre not in premiers:
+                    premiers.append(self.nombre)
                 self.indexpremiers += 1
         return self.facteurs
 
@@ -135,7 +117,7 @@ class Factorisation():
         """
         Affiche la produits des nombres premiers
         """
-        print(f'Le produit de facteurs premiers de {n} est : ',end='')
+        print(f'La décomposition en produit de facteurs premiers de {n} est ',end='')
         for i in range(len(facteurs)):
             print(f'{facteurs[i]}', end='')
             if i != len(facteurs)-1:
@@ -144,24 +126,37 @@ class Factorisation():
 
 if __name__ == "__main__":
     start_time = time.time()
-    p = Premier()
-    n = 2 #106272 #34911 #2
+    premiers = list()
+    n = 2 #106272 #34911 # n° du triangle
     trouvé = False
-    while not trouvé:
+    ndiviseurs = 6
+    while not trouvé and n < 8:
         somme = Triangle(n)
-        # print(f'La somme du triangle naturel n°{n} est {somme}')
-        f = Factorisation(p.premiers)
+        f = Factorisation()
         facteurs = f.Factorise(somme)
-        # f.Affiche(somme, facteurs)
+        # print(f'{facteurs}, {set(facteurs)} ')
         d = Diviseurs()
-        # print(f'{somme} est divisible par {d.Compte(facteurs)} combinaisons')
-        d.Dénombre(facteurs)
-        if len(d.diviseurs)%100 == 0:
-            if len(d.diviseurs) == 500:
+        combinaisons = d.Compte(facteurs)
+        c2 = d.Compte(set(facteurs))
+        print(f'{combinaisons}, {c2}, {facteurs} ')
+        if  combinaisons >= ndiviseurs:
+            d.Dénombre(facteurs)
+            if len(d.diviseurs) == ndiviseurs:
+                print(f'La somme du triangle naturel n°{n} est {somme}')
+                f.Affiche(somme, facteurs)
+                print(f'{somme} est divisible par {combinaisons} combinaisons')
+                d.Affiche(somme)
+                print(f'Il y a {len(premiers)} nombres premiers dans la liste :\n{premiers}')
                 trouvé = True
-            print(f'La somme du triangle naturel n°{n} est {somme}')
-            d.Affiche(somme)
         n += 1
-        print(p.premiers)
+        # if time.time()-start_time > 300:
+        #     trouvé = True
+        #     print(f'Triangle naturel n°{n} en cours dont la somme est {somme}')
+        #     f.Affiche(somme, facteurs)
+        #     print(f'{somme} est divisible par {combinaisons} combinaisons')
+        #     d.Dénombre(facteurs)
+        #     d.Affiche(somme)
+        #     print(f'Il y a {len(premiers)} nombres premiers dans la liste')
+        # # print()
     print(f'Durée d\'exécution : {time.time()-start_time}s.\n')
 
