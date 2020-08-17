@@ -11,6 +11,7 @@ class Triangle():
         somme = 0
         triangle = list(range(1, n+1))
         somme = sum(triangle)
+        # print(f'Triangle {n}, somme={somme}')
         return somme
 
 class Factoriel():
@@ -96,24 +97,48 @@ class Factorisation():
         """
         Factorise n par des nombres premiers et génère une liste de ces facteurs
         """
-        self.divisé = n
-        self.facteurs.clear()
-        if Premier(self.nombre):
-            if self.nombre not in premiers:
-                premiers.append(self.nombre)
-        while self.quotient != 1:
-            if self.divisé%premiers[self.indexpremiers] == 0:
-                self.quotient = self.divisé//premiers[self.indexpremiers]
-                self.divisé = self.quotient
-                self.facteurs.append(premiers[self.indexpremiers])
+        # self.divisé = n
+        # self.facteurs.clear()
+        # if Premier(self.nombre):
+        #     if self.nombre not in premiers:
+        #         premiers.append(self.nombre)
+        # while self.quotient != 1:
+        #     if self.divisé%premiers[self.indexpremiers] == 0:
+        #         self.quotient = self.divisé//premiers[self.indexpremiers]
+        #         self.divisé = self.quotient
+        #         self.facteurs.append(premiers[self.indexpremiers])
+        #     else:
+        #         self.nombre += 1
+        #         while not Premier(self.nombre):
+        #             self.nombre += 1
+        #         if self.nombre not in premiers:
+        #             premiers.append(self.nombre)
+        #         self.indexpremiers += 1
+        # return self.facteurs
+        nb = 2
+        if premiers == []:
+            premiers.append(nb)
+
+        indexpremiers = 0
+        divisé = n
+        quotient = int()
+        facteurs = list()
+        while quotient != 1:
+            if divisé%premiers[indexpremiers] == 0:
+                quotient = divisé//premiers[indexpremiers]
+                divisé = quotient
+                facteurs.append(premiers[indexpremiers])
             else:
-                self.nombre += 1
-                while not Premier(self.nombre):
-                    self.nombre += 1
-                if self.nombre not in premiers:
-                    premiers.append(self.nombre)
-                self.indexpremiers += 1
-        return self.facteurs
+                if indexpremiers < len(premiers)-1:
+                    indexpremiers += 1
+                else:
+                    nb += 1
+                    while not Premier(nb):
+                        nb += 1
+                    premiers.append(nb)
+                    indexpremiers += 1
+        # print(f'facteurs {facteurs}\n')
+        return facteurs
 
     def Affiche(self, n, facteurs):
         """
@@ -132,7 +157,7 @@ if __name__ == "__main__":
     facteurs = list()
     n = 2 #106272 #34911 # n° du triangle
     trouvé = False
-    ndiviseurs = 300
+    ndiviseurs = 20
     d = Diviseurs()
     while not trouvé:
         somme = Triangle(n)
