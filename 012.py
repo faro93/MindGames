@@ -97,24 +97,6 @@ class Factorisation():
         """
         Factorise n par des nombres premiers et génère une liste de ces facteurs
         """
-        # self.divisé = n
-        # self.facteurs.clear()
-        # if Premier(self.nombre):
-        #     if self.nombre not in premiers:
-        #         premiers.append(self.nombre)
-        # while self.quotient != 1:
-        #     if self.divisé%premiers[self.indexpremiers] == 0:
-        #         self.quotient = self.divisé//premiers[self.indexpremiers]
-        #         self.divisé = self.quotient
-        #         self.facteurs.append(premiers[self.indexpremiers])
-        #     else:
-        #         self.nombre += 1
-        #         while not Premier(self.nombre):
-        #             self.nombre += 1
-        #         if self.nombre not in premiers:
-        #             premiers.append(self.nombre)
-        #         self.indexpremiers += 1
-        # return self.facteurs
         nb = 2
         if premiers == []:
             premiers.append(nb)
@@ -124,6 +106,7 @@ class Factorisation():
         quotient = int()
         facteurs = list()
         while quotient != 1:
+            nb = premiers[indexpremiers]
             if divisé%premiers[indexpremiers] == 0:
                 quotient = divisé//premiers[indexpremiers]
                 divisé = quotient
@@ -135,9 +118,10 @@ class Factorisation():
                     nb += 1
                     while not Premier(nb):
                         nb += 1
-                    premiers.append(nb)
+                    if nb not in premiers:
+                        premiers.append(nb)
                     indexpremiers += 1
-        # print(f'facteurs {facteurs}\n')
+        # print(f'Somme {n}, facteurs {facteurs}\n')
         return facteurs
 
     def Affiche(self, n, facteurs):
@@ -155,24 +139,23 @@ if __name__ == "__main__":
     start_time = time.time()
     premiers = list()
     facteurs = list()
-    n = 2 #106272 #34911 # n° du triangle
+    n = 2
     trouvé = False
-    ndiviseurs = 20
+    ndiviseurs = 500
     d = Diviseurs()
     while not trouvé:
         somme = Triangle(n)
         f = Factorisation()
         facteurs = f.Factorise(somme)
         # combinaisons = d.Compte(len(facteurs))
-
         d.Dénombre(facteurs)
-        if len(d.diviseurs) == ndiviseurs:
+        if len(d.diviseurs) >= ndiviseurs:
             trouvé = True
             print(f'La somme du triangle naturel n°{n} est {somme}')
             f.Affiche(somme, facteurs)
             # print(f'{somme} est divisible par {combinaisons} combinaisons')
             d.Affiche(somme)
-            print(f'Il y a {len(premiers)} nombres premiers dans la liste :\n{premiers}')
+            # print(f'Il y a {len(premiers)} nombres premiers dans la liste :\n{premiers}')
         n += 1
     print(f'Durée d\'exécution : {time.time()-start_time}s.\n')
 
