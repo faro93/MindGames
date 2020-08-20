@@ -44,4 +44,4 @@ def impaire(n):
 if __name__ == "__main__":
     starttime = time.time()
     main(1_000_000)
-    print(f'Duréee d\exécution : {time.time()-starttime}s.')
+    print(f'Duréee d\'exécution : {time.time()-starttime}s.')
