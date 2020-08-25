@@ -62,5 +62,5 @@ if __name__ == '__main__':
     starttime = time.time()
     n = 40
     r = [n//2, n//2]
-    print(f'Une permutation de {n} items sans répétition de {r} permet {p.Calculer(n, r)} possibilités.')
+    print(f'Une permutation de {n} items avec répétition de {r} permet {p.Calculer(n, r)} possibilités.')
     print(f'Durée d\'exécution : {time.time()-starttime}s.')
