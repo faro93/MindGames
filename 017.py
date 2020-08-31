@@ -25,7 +25,8 @@ class Nombre():
             self.chiffres.append(n-y)
             n = y//10
         self.chiffres.append(n)
-        self.Ecrire(self.chiffres)
+        c = self.Ecrire(self.chiffres)
+        return c
 
     def Ecrire(self, liste):
         chaine = list()
@@ -44,51 +45,46 @@ class Nombre():
                     elif len(liste) == 1:
                         chaine.insert(0, self.unities[liste[i]])
             elif i == 1 and not unities:
-                chaine.insert(0, self.tens[liste[i]-1])
+                if liste[i] != 0:
+                    chaine.insert(0, self.tens[liste[i]-1])
             elif i == 2:
                 if liste[0] != 0 or liste[1] != 0:
                     chaine.insert(0, 'and')
                 if liste[i] != 0:
-                    chaine.insert(0, self.unities[liste[i]] + ' ' + self.hundred[0])
+                    chaine.insert(0, self.hundred[0])
+                    chaine.insert(0, self.unities[liste[i]])
             elif i == 3:
                 if i < len(liste)-1 and liste[i]+liste[i+1]*10 < 20 and not thousands:
                     if liste[i] != 0 or liste[i+1] == 1:
-                        chaine.insert(0, self.unities[liste[i]+liste[i+1]*10] + ' ' + self.thousand[0] + ' and ')
+                        chaine.insert(0, 'and')
+                        chaine.insert(0, self.thousand[0])
+                        chaine.insert(0, self.unities[liste[i]+liste[i+1]*10])
                         thousands = True
                 elif not thousands:
                     if liste[2] != 0:
                         chaine.insert(0, 'and')
-                    chaine.insert(0, self.unities[liste[i]] + ' ' + self.thousand[0])
-            # if i == 3 and not thousands:
-            #     if liste[2] != 0:
-            #         chaine.insert(0, 'and')
-            #     chaine.insert(0, self.unities[liste[i]] + ' ' + self.thousand[0])
+                    chaine.insert(0, self.thousand[0])
+                    if liste[i] != 0:
+                        chaine.insert(0, self.unities[liste[i]])
             elif i > 3 and not thousands:
-                chaine.insert(0, self.tens[liste[i]])
-        # print(f'{chaine}')
+                chaine.insert(0, self.tens[liste[i]-1])
+
         for i in range(len(chaine)):
             print(chaine[i] + ' ', end='')
         print()
+        return chaine
 
 
 if __name__ == '__main__':
     starttime = time.time()
-    # main(1000)
     n = Nombre()
 
-    x = 19111
-    print(f'{x} : ', end='')
-    n.Décomposer(x)
-
-    x = 20364
-    print(f'{x} : ', end='')
-    n.Décomposer(x)
-
-    # for x in (0, 10, 100, 1000, 12345, 999):
-    #     print(f'{x} : ', end='')
-    #     n.Décomposer(x)
-
-    for x in range(140, 180):
+    ch = list()
+    s = int()
+    for x in range(1, 1001):
         print(f'{x} : ', end='')
-        n.Décomposer(x)
+        ch = n.Décomposer(x)
+        for i in ch:
+            s += len(i)
+            print(f'\'{i}\' a {len(i)} caractères, la somme des caractères est {s}.')
     print(f'Durée d\'exécution : {time.time()-starttime}s.')
