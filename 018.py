@@ -37,10 +37,10 @@ this problem by trying every route. However, Problem 67, is the
 same challenge with a triangle containing one-hundred rows; it
 cannot be solved by brute force, and requires a clever method! ;o)
 """
-t=[[3],
-   [7, 4],
-   [2, 4, 6],
-   [8, 5, 9, 3]]
+t1=[[3],
+    [7, 4],
+    [2, 4, 6],
+    [8, 5, 9, 3]]
 
 class Dijkstra():
     def __init__(self, m):
@@ -67,30 +67,39 @@ class Dijkstra():
     def PoidsLourd(self):
         pass
 
-def Tree2Matrix(triangle):
-    s = int()
-    l = list()
-    for i in triangle:
-        s += len(i)
-    z = np.zeros((s+1, s+1), np.int8)
-    print(f'{z}')
+class GraphicConvert():
+    def __init__(self):
+        pass
 
-    for i in triangle:
-        for j in i:
-            l.append(j)
-    print(f'l={l}')
+    def Triangle2Matrix(self, triangle):
+        s = int()
+        for i in triangle:
+            s += len(i)
 
-    for i in range(len(l)):
-        print(f'l[{i}] -> {l[i]}')
+        m = np.zeros((s+1, s+1), np.int8)
 
-    for i in range(len(triangle)):
-        print(f'triangle[{i}] -> {triangle[i]}')
-        for j in range(len(triangle[i])):
-            print(f'triangle[{i}][{j}] -> {triangle[i][j]}')
+        line = 0
+        row = 1
+        for i in range(len(triangle)):
+            print(f'triangle[{i}]={triangle[i]}')
+            if len(triangle[i]) < 2:
+                print(f'({line}, {row}) : {triangle[i][0]}')
+            else:
+                j = int()
+                while j < len(triangle[i])-1:
+                    line += 1
+                    print(f'({line}, {row}) : {triangle[i][j:j+2]}')
+                    j += 1
+                    row += 1
+            row += 1
+
+        return m
 
 if __name__ == '__main__':
     starttime = time.time()
-    Tree2Matrix(t)
+    gc = GraphicConvert()
+    m = gc.Triangle2Matrix(t1)
+    print(m)
     # d = Dijkstra(m1)
     # d.info()
     print(f'Durée d\'exécution : {time.time()-starttime}s')
