@@ -37,30 +37,10 @@ this problem by trying every route. However, Problem 67, is the
 same challenge with a triangle containing one-hundred rows; it
 cannot be solved by brute force, and requires a clever method! ;o)
 """
-m1 = [[0, 0, 0, 0, 0],
-      [3, 0, 0, 0, 0],
-      [7, 4, 0, 0, 0],
-      [2, 4, 6, 0, 0],
-      [8, 5, 9, 3, 0]]
-
-m2 = [[00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00],
-      [75, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00],
-      [95, 64, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00],
-      [17, 47, 82, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00],
-      [18, 35, 87, 10, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00],
-      [20,  4, 82, 47, 65, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00],
-      [19,  1, 23, 75,  3, 34, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00],
-      [88,  2, 77, 73,  7, 63, 67, 00, 00, 00, 00, 00, 00, 00, 00, 00],
-      [99, 65,  4, 28,  6, 16, 70, 92, 00, 00, 00, 00, 00, 00, 00, 00],
-      [41, 41, 26, 56, 83, 40, 80, 70, 33, 00, 00, 00, 00, 00, 00, 00],
-      [41, 48, 72, 33, 47, 32, 37, 16, 94, 29, 00, 00, 00, 00, 00, 00],
-      [53, 71, 44, 65, 25, 43, 91, 52, 97, 51, 14, 00, 00, 00, 00, 00],
-      [70, 11, 33, 28, 77, 73, 17, 78, 39, 68, 17, 57, 00 ,00, 00, 00],
-      [91, 71, 52, 38, 17, 14, 91, 43, 58, 50, 27, 29, 48, 00, 00, 00],
-      [63, 66,  4, 68, 89, 53, 67, 30, 73, 16, 69, 87, 40, 31, 00, 00],
-      [ 4, 62, 98, 27, 23,  9, 70, 98, 73, 93, 38, 53, 60,  4, 23, 00]]
-
-print(m1, m2)
+t=[[3],
+   [7, 4],
+   [2, 4, 6],
+   [8, 5, 9, 3]]
 
 class Dijkstra():
     def __init__(self, m):
@@ -87,9 +67,30 @@ class Dijkstra():
     def PoidsLourd(self):
         pass
 
+def Tree2Matrix(triangle):
+    s = int()
+    l = list()
+    for i in triangle:
+        s += len(i)
+    z = np.zeros((s+1, s+1), np.int8)
+    print(f'{z}')
+
+    for i in triangle:
+        for j in i:
+            l.append(j)
+    print(f'l={l}')
+
+    for i in range(len(l)):
+        print(f'l[{i}] -> {l[i]}')
+
+    for i in range(len(triangle)):
+        print(f'triangle[{i}] -> {triangle[i]}')
+        for j in range(len(triangle[i])):
+            print(f'triangle[{i}][{j}] -> {triangle[i][j]}')
 
 if __name__ == '__main__':
     starttime = time.time()
-    d = Dijkstra(m1)
-    d.info()
+    Tree2Matrix(t)
+    # d = Dijkstra(m1)
+    # d.info()
     print(f'Durée d\'exécution : {time.time()-starttime}s')
