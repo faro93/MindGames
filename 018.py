@@ -84,11 +84,14 @@ class GraphicConvert():
             print(f'triangle[{i}]={triangle[i]}')
             if len(triangle[i]) < 2:
                 print(f'({line}, {row}) : {triangle[i][0]}')
+                m.itemset((line, row), triangle[i][0])
             else:
                 j = int()
                 while j < len(triangle[i])-1:
                     line += 1
                     print(f'({line}, {row}) : {triangle[i][j:j+2]}')
+                    m.itemset((line, row), triangle[i][j])
+                    m.itemset((line, row+1), triangle[i][j+1])
                     j += 1
                     row += 1
             row += 1
