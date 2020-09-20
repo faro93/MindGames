@@ -44,16 +44,15 @@ t1=[[3],
 
 class Dijkstra():
     def __init__(self, m):
-        self.m = np.array(m)
+        self.m = m
+        self.d = list()
+        self.p = list()
+        self.f = list()
 
 
-    def info(self, hauteur=False, largeur=False):
+    def info(self):
         """ Affiche les informations de la matrice
         """
-        if largeur:
-            return self.m.shape[0]
-        if hauteur:
-            return self.m.shape[1]
         print(f'matrice :\n{self.m}')
         print(f'\tdimension : {self.m.ndim}')
         print(f'\tforme : {self.m.shape}')
@@ -61,8 +60,24 @@ class Dijkstra():
         print('\ttaille :',\
             f'{self.m.shape[0]*self.m.shape[1]*self.m.itemsize} octets')
         
-    def PoidsLéger(self):
+    def PoidsLéger(self, r):
+        self.d = [float('inf')]*self.m.shape[0]
+        self.p = [None]*self.m.shape[0]
+        self.f = [x for x in range(self.m.shape[0])]
+        self.Listes()
+        self.d[r] = 0
+        print(f'Recherche du plus court chemin à partir du sommet r={r}')
+        self.Listes()
+
+    def Relachement(self):
         pass
+
+
+    def Listes(self):
+        print(self.d)
+        print(self.p)
+        print(self.f)
+        print()
 
     def PoidsLourd(self):
         pass
@@ -81,15 +96,15 @@ class GraphicConvert():
         line = 0
         row = 1
         for i in range(len(triangle)):
-            print(f'triangle[{i}]={triangle[i]}')
+            # print(f'triangle[{i}]={triangle[i]}')
             if len(triangle[i]) < 2:
-                print(f'({line}, {row}) : {triangle[i][0]}')
+                # print(f'({line}, {row}) : {triangle[i][0]}')
                 m.itemset((line, row), triangle[i][0])
             else:
                 j = int()
                 while j < len(triangle[i])-1:
                     line += 1
-                    print(f'({line}, {row}) : {triangle[i][j:j+2]}')
+                    # print(f'({line}, {row}) : {triangle[i][j:j+2]}')
                     m.itemset((line, row), triangle[i][j])
                     m.itemset((line, row+1), triangle[i][j+1])
                     j += 1
@@ -102,7 +117,8 @@ if __name__ == '__main__':
     starttime = time.time()
     gc = GraphicConvert()
     m = gc.Triangle2Matrix(t1)
-    print(m)
-    # d = Dijkstra(m1)
-    # d.info()
+    # print(m)
+    d = Dijkstra(m)
+    d.info()
+    d.PoidsLéger(0)
     print(f'Durée d\'exécution : {time.time()-starttime}s')
