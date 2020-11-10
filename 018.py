@@ -61,22 +61,33 @@ class Dijkstra():
             f'{self.m.shape[0]*self.m.shape[1]*self.m.itemsize} octets')
         
     def PoidsLéger(self, r):
+        self.InitPL(r)
+        print(f'Recherche du plus court chemin à partir du sommet r={r}')
+        self.Listes()
+        while self.f:
+            print(f'self.f={self.f}')
+
+            self.f.pop(r)
+        print(f'self.f={self.f}')
+
+
+    def Init(self, r):
         self.d = [float('inf')]*self.m.shape[0]
         self.p = [None]*self.m.shape[0]
         self.f = [x for x in range(self.m.shape[0])]
         self.Listes()
         self.d[r] = 0
-        print(f'Recherche du plus court chemin à partir du sommet r={r}')
-        self.Listes()
 
-    def Relachement(self):
+    def SommetSuivant(self, u):
         pass
 
+    def Relachement(self, u , v):
+        if self.d[v] > self.d[u]+
 
     def Listes(self):
-        print(self.d)
-        print(self.p)
-        print(self.f)
+        print(f'self.d={self.d}')
+        print(f'self.p={self.p}')
+        print(f'self.f={self.f}')
         print()
 
     def PoidsLourd(self):
@@ -115,6 +126,9 @@ class GraphicConvert():
 
 if __name__ == '__main__':
     starttime = time.time()
+    print(f'triangle:')
+    for l in t1:
+            print(f'{l}')
     gc = GraphicConvert()
     m = gc.Triangle2Matrix(t1)
     # print(m)
