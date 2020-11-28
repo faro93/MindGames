@@ -45,10 +45,10 @@ t1=[[3],
 class Dijkstra():
     def __init__(self, m):
         self.m = m
-        self.d = list()
-        self.p = list()
-        self.f = list()
-
+        self.d = list() # plus court chemin de l'origine au le sommet courant
+        self.p = list() # dernier pas du plus court chemin de l'origine au sommet courant
+        self.f = dict() # ensemble des sommets non traités
+        self.infini = int()
 
     def info(self):
         """ Affiche les informations de la matrice
@@ -59,22 +59,35 @@ class Dijkstra():
         print(f'\ttype : {self.m.dtype} ({self.m.itemsize} octets)')
         print('\ttaille :',\
             f'{self.m.shape[0]*self.m.shape[1]*self.m.itemsize} octets')
-        
+
     def PoidsLéger(self, r):
-        self.InitPL(r)
+        self.Init(r)
         print(f'Recherche du plus court chemin à partir du sommet r={r}')
         self.Listes()
+        self.Algo()
+
+    def Algo(self):
         while self.f:
-            print(f'self.f={self.f}')
+            u = self.ExtractU()
+            print(f'self.d[{u}]={self.d[u]}')
+            self.Listes()
 
-            self.f.pop(r)
-        print(f'self.f={self.f}')
+    def ExtractU(self):
+        mini = max(self.d)+1
+        for x in self.f.keys():
+            if self.d[x] < mini:
+                mini = self.d[x]
 
+        for x in self.f.keys():
+            if self.d[x] == mini and x in self.f:
+                self.f.pop(x)
+                return x
 
     def Init(self, r):
-        self.d = [float('inf')]*self.m.shape[0]
+        self.infini = sum(sum([i for i in self.m])) + 1
+        self.d = [self.infini]*self.m.shape[0]
         self.p = [None]*self.m.shape[0]
-        self.f = [x for x in range(self.m.shape[0])]
+        self.f = {x:x for x in range(self.m.shape[0])}
         self.Listes()
         self.d[r] = 0
 
@@ -82,7 +95,8 @@ class Dijkstra():
         pass
 
     def Relachement(self, u , v):
-        if self.d[v] > self.d[u]+
+        pass
+        #if self.d[v] > self.d[u]+
 
     def Listes(self):
         print(f'self.d={self.d}')
@@ -132,7 +146,7 @@ if __name__ == '__main__':
     gc = GraphicConvert()
     m = gc.Triangle2Matrix(t1)
     # print(m)
-    d = Dijkstra(m)
-    d.info()
-    d.PoidsLéger(0)
+    D = Dijkstra(m)
+    D.info()
+    D.PoidsLéger(0)
     print(f'Durée d\'exécution : {time.time()-starttime}s')
