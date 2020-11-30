@@ -60,7 +60,7 @@ class Dijkstra():
         print('\ttaille :',\
             f'{self.m.shape[0]*self.m.shape[1]*self.m.itemsize} octets')
 
-    def PoidsLéger(self, r):
+    def LightWeight(self, r):
         self.Init(r)
         print(f'Recherche du plus court chemin à partir du sommet r={r}')
         self.Listes()
@@ -68,20 +68,25 @@ class Dijkstra():
 
     def Algo(self):
         while self.f:
-            u = self.ExtractU()
+            u = self.ExtractCurrentEdge()
             print(f'self.d[{u}]={self.d[u]}')
+            self.FindNextEdge(u)
             self.Listes()
 
-    def ExtractU(self):
-        mini = max(self.d)+1
-        for x in self.f.keys():
-            if self.d[x] < mini:
-                mini = self.d[x]
+    def ExtractCurrentEdge(self):
+        mini = self.FindMini()
 
         for x in self.f.keys():
             if self.d[x] == mini and x in self.f:
                 self.f.pop(x)
                 return x
+
+    def FindMini(self):
+        mini = max(self.d)+1
+        for x in self.f.keys():
+            if self.d[x] < mini:
+                mini = self.d[x]
+        return mini
 
     def Init(self, r):
         self.infini = sum(sum([i for i in self.m])) + 1
@@ -91,7 +96,7 @@ class Dijkstra():
         self.Listes()
         self.d[r] = 0
 
-    def SommetSuivant(self, u):
+    def FindNextEdge(self, u):
         pass
 
     def Relachement(self, u , v):
@@ -148,5 +153,5 @@ if __name__ == '__main__':
     # print(m)
     D = Dijkstra(m)
     D.info()
-    D.PoidsLéger(0)
+    D.LightWeight(0)
     print(f'Durée d\'exécution : {time.time()-starttime}s')
