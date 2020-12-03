@@ -48,6 +48,7 @@ class Dijkstra():
         self.d = list() # plus court chemin de l'origine au le sommet courant
         self.p = list() # dernier pas du plus court chemin de l'origine au sommet courant
         self.f = dict() # ensemble des sommets non traités
+        self.o = dict() # numéros des sommets
         self.infini = int()
 
     def info(self):
@@ -60,22 +61,59 @@ class Dijkstra():
         print('\ttaille :',\
             f'{self.m.shape[0]*self.m.shape[1]*self.m.itemsize} octets')
 
+    def Init(self, r, LW = True):
+        if LW:
+            self.infini = sum(sum([i for i in self.m])) + 1
+        else:
+            self.infini = sum(sum([i for i in self.m])) - 1
+        self.d = [self.infini]*self.m.shape[0]
+        self.p = [None]*self.m.shape[0]
+        self.f = {x:x for x in range(self.m.shape[0])}
+        self.GetEdgesNumbers()
+        # self.Listes()
+        self.d[r] = 0
+
+    def GetEdgesNumbers(self):
+        self.o = {i:0 for i in range(self.m.shape[0])}
+        for y in range(self.m.shape[1]):
+            for x in range(self.m.shape[0]):
+                if self.o[x] < self.m[y][x]:
+                    self.o[x] = self.m[y][x]
+
     def LightWeight(self, r):
+        # self.info()
         self.Init(r)
         print(f'Recherche du plus court chemin à partir du sommet r={r}')
-        self.Listes()
+        # self.Listes()
         self.Algo()
+        self.DisplayPaths(r)
+
+    def DisplayPaths(self, r):
+        # print(f'r={r},\nself.d={self.d},\nself.p={self.p}\n')
+        path = list()
+        for s in range(len(self.d)):
+            if r != s:
+                print(f'Le chemin de r={r} à s={s} a un poids de {self.d[s]} (', end='')
+                path = [s]
+                while s != r:
+                    path.append(self.p[s])
+                    s = self.p[s]
+                path.reverse()
+                for p in range(len(path)):
+                    print(f'{path[p]}', end='')
+                    if p < len(path)-1:
+                        print(f', ', end='')
+                print(f').')
 
     def Algo(self):
         while self.f:
             u = self.ExtractCurrentEdge()
-            print(f'self.d[{u}]={self.d[u]}')
+            # print(f'self.d[{u}]={self.d[u]}')
             self.FindNextEdge(u)
-            self.Listes()
+            # self.Listes()
 
     def ExtractCurrentEdge(self):
         mini = self.FindMini()
-
         for x in self.f.keys():
             if self.d[x] == mini and x in self.f:
                 self.f.pop(x)
@@ -88,29 +126,22 @@ class Dijkstra():
                 mini = self.d[x]
         return mini
 
-    def Init(self, r):
-        self.infini = sum(sum([i for i in self.m])) + 1
-        self.d = [self.infini]*self.m.shape[0]
-        self.p = [None]*self.m.shape[0]
-        self.f = {x:x for x in range(self.m.shape[0])}
-        self.Listes()
-        self.d[r] = 0
-
     def FindNextEdge(self, u):
-        pass
+        for v in range(len(self.m[u])):
+            if self.m[u][v] != 0:
+                self.ArcRelease(u, v)
 
-    def Relachement(self, u , v):
-        pass
-        #if self.d[v] > self.d[u]+
+    def ArcRelease(self, u , v):
+        # print(f'u={u}, v={v}')
+        if self.d[v] > self.d[u] + self.m[u][v]:
+            self.d[v] = self.d[u] + self.m[u][v]
+            self.p[v] = u
 
     def Listes(self):
         print(f'self.d={self.d}')
         print(f'self.p={self.p}')
         print(f'self.f={self.f}')
         print()
-
-    def PoidsLourd(self):
-        pass
 
 class GraphicConvert():
     def __init__(self):
@@ -152,6 +183,5 @@ if __name__ == '__main__':
     m = gc.Triangle2Matrix(t1)
     # print(m)
     D = Dijkstra(m)
-    D.info()
     D.LightWeight(0)
     print(f'Durée d\'exécution : {time.time()-starttime}s')
